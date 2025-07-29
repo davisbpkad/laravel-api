@@ -7,32 +7,7 @@ A robust Laravel API backend with role-based authentication (User & Admin) and c
 - **Role-based Authentication** (User & Admin roles)
 - **JWT Token Authentication** using Laravel Sanctum
 - **User Registration & Login**
-- **Profile Manage#### 3. Admin endpoint example
-```bash
-curl -X GET http://localhost:8000/api/admin/users \
-  -H "Authorization: Bearer YOUR_ADMIN_TOKEN_HERE"
-```
-
-#### 4. Todo endpoints examples
-```bash
-# Get all todos
-curl -X GET http://localhost:8000/api/todos \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE"
-
-# Create a new todo
-curl -X POST http://localhost:8000/api/todos \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
-  -H "Content-Type: application/json" \
-  -d '{"nama":"Learn Laravel","deskripsi":"Complete Laravel tutorial","due_date":"2025-08-05"}'
-
-# Toggle todo completion
-curl -X PATCH http://localhost:8000/api/todos/1/toggle \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE"
-
-# Get todo statistics
-curl -X GET http://localhost:8000/api/my-todo-stats \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE"
-```*
+- **Profile Management**
 - **Admin User Management**
 - **Complete Todo Management System**
   - Create, Read, Update, Delete todos
@@ -428,21 +403,42 @@ Query Parameters:
 
 #### 1. Login and get token
 ```bash
-curl -X POST http://localhost:8000/api/login 
-  -H "Content-Type: application/json" 
+curl -X POST http://localhost:8000/api/login \
+  -H "Content-Type: application/json" \
   -d '{"email":"admin@example.com","password":"password"}'
 ```
 
 #### 2. Use token to access protected routes
 ```bash
-curl -X GET http://localhost:8000/api/user 
+curl -X GET http://localhost:8000/api/user \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 
 #### 3. Admin endpoint example
 ```bash
-curl -X GET http://localhost:8000/api/admin/users 
+curl -X GET http://localhost:8000/api/admin/users \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN_HERE"
+```
+
+#### 4. Todo endpoints examples
+```bash
+# Get all todos
+curl -X GET http://localhost:8000/api/todos \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+
+# Create a new todo
+curl -X POST http://localhost:8000/api/todos \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{"nama":"Learn Laravel","deskripsi":"Complete Laravel tutorial","due_date":"2025-08-05"}'
+
+# Toggle todo completion
+curl -X PATCH http://localhost:8000/api/todos/1/toggle \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+
+# Get todo statistics
+curl -X GET http://localhost:8000/api/my-todo-stats \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 
 ### Using Postman
@@ -1513,12 +1509,6 @@ Common HTTP status codes:
 
 ---
 
-## 📄 License
-
-This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
----
-
 ## 📞 Support
 
 If you encounter any issues or have questions:
@@ -1533,33 +1523,10 @@ For development issues, enable debug mode in your `.env` file:
 APP_DEBUG=true
 ```
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🙏 Acknowledgments
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Built with [Laravel](https://laravel.com) - The PHP Framework for Web Artisans
+- Authentication powered by [Laravel Sanctum](https://laravel.com/docs/sanctum)
+- Frontend integration examples for [Vue.js](https://vuejs.org)
