@@ -2,6 +2,12 @@
 
 A robust Laravel API backend with role-based authentication (User & Admin) and comprehensive Todo management system using Laravel Sanctum, designed for SPA (Single Page Application) frontends.
 
+## 🏗️ **Project Structure**
+
+This repository contains the **backend API**. For the complete full-stack application:
+- **Backend API** (this repo): `laravel-api/` - Laravel API with authentication and todo management
+- **Frontend Client**: `todo-client/` - Vue.js 3 SPA with Pinia state management
+
 ## 🚀 Features
 
 - **Role-based Authentication** (User & Admin roles)
@@ -14,10 +20,12 @@ A robust Laravel API backend with role-based authentication (User & Admin) and c
   - Todo completion tracking with timestamps
   - Due date management with overdue detection
   - Role-based access control (users see only their todos, admins see all)
-  - Todo statistics and reporting
-- **Secure API Endpoints**
+  - Real-time todo statistics and reporting
+  - Role-specific statistics endpoints (`/my-todo-stats` for users, `/admin/todo-stats` for admins)
+- **Secure API Endpoints** with proper CORS configuration
 - **Input Validation & Error Handling**
 - **SQLite Database** (easily switchable to MySQL/PostgreSQL)
+- **Production-ready** with comprehensive API documentation
 
 ## 📋 Requirements
 
@@ -25,6 +33,34 @@ A robust Laravel API backend with role-based authentication (User & Admin) and c
 - Composer
 - Laravel 12.x
 - SQLite (or MySQL/PostgreSQL)
+
+## 🎯 **Frontend Integration**
+
+This API is designed to work with the **Vue.js todo-client** frontend. The complete application structure:
+
+```
+📁 Project Root/
+├── 📁 laravel-api/          # Backend API (this repository)
+│   ├── app/
+│   ├── database/
+│   ├── routes/
+│   └── ...
+└── 📁 todo-client/          # Vue.js 3 Frontend
+    ├── src/
+    │   ├── components/
+    │   ├── stores/
+    │   ├── services/
+    │   └── views/
+    └── ...
+```
+
+### **Frontend Features**
+- **Vue.js 3** with Composition API
+- **Pinia** for state management
+- **Real-time stats** without constant API calls
+- **Role-based UI** (admin vs user views)
+- **Responsive design** with Tailwind CSS
+- **Auto-sync** with backend every 5 minutes
 
 ## ⚡ Quick Start
 
@@ -515,7 +551,73 @@ SANCTUM_STATEFUL_DOMAINS=localhost:3000,127.0.0.1:3000
 
 ## 🚀 Frontend Integration
 
-This Laravel API is designed to work seamlessly with Single Page Applications (SPAs). Below are detailed instructions for connecting to a Vue.js frontend.
+This Laravel API is designed to work seamlessly with the **Vue.js todo-client** frontend application.
+
+### **Production Setup**
+
+For production deployment, you'll have:
+- **Backend**: Laravel API running on your server (e.g., `https://api.yourdomain.com`)
+- **Frontend**: Vue.js SPA served from CDN or static hosting (e.g., `https://app.yourdomain.com`)
+
+### **Quick Start with Vue.js Frontend**
+
+1. **Start the Laravel API** (this repository):
+```bash
+cd laravel-api
+php artisan serve
+# API available at http://localhost:8000
+```
+
+2. **Start the Vue.js Frontend** (separate repository):
+```bash
+cd todo-client
+npm install
+npm run dev
+# Frontend available at http://localhost:5173
+```
+
+3. **Test the Integration**:
+   - Register a new user through the Vue.js frontend
+   - Login and start managing todos
+   - Create an admin user to see admin features
+
+### **API Endpoints Summary**
+
+The API provides these key endpoints for the frontend:
+
+- **Authentication**: `/api/register`, `/api/login`, `/api/logout`
+- **User Management**: `/api/user`, `/api/profile`
+- **Todo Management**: `/api/todos` (CRUD operations)
+- **Statistics**: `/api/my-todo-stats` (users), `/api/admin/todo-stats` (admins)
+- **Admin Features**: `/api/admin/users` (user management)
+
+### **CORS Configuration**
+
+The API is configured to work with the Vue.js frontend. CORS settings in `config/cors.php`:
+
+```php
+'paths' => ['api/*', 'sanctum/csrf-cookie'],
+'allowed_methods' => ['*'],
+'allowed_origins' => ['http://localhost:5173', 'http://localhost:3000'],
+'allowed_origins_patterns' => [],
+'allowed_headers' => ['*'],
+'exposed_headers' => [],
+'max_age' => 0,
+'supports_credentials' => true,
+```
+
+### **Environment Configuration**
+
+Make sure your `.env` file includes:
+
+```env
+# For SPA frontend
+SANCTUM_STATEFUL_DOMAINS=localhost:5173,localhost:3000
+SESSION_DOMAIN=localhost
+
+# CORS settings
+CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
+```
 
 ### Vue.js Frontend Setup
 

@@ -25,6 +25,14 @@ class Todo extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     */
+    protected $appends = [
+        'is_completed',
+        'is_overdue',
+    ];
+
+    /**
      * Get the user that owns the todo
      */
     public function user(): BelongsTo
@@ -62,6 +70,22 @@ class Todo extends Model
     public function isOverdue(): bool
     {
         return $this->due_date && $this->due_date->isPast() && !$this->isCompleted();
+    }
+
+    /**
+     * Get the is_completed attribute for JSON serialization
+     */
+    public function getIsCompletedAttribute(): bool
+    {
+        return $this->isCompleted();
+    }
+
+    /**
+     * Get the is_overdue attribute for JSON serialization
+     */
+    public function getIsOverdueAttribute(): bool
+    {
+        return $this->isOverdue();
     }
 
     /**
