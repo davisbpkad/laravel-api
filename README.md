@@ -62,6 +62,134 @@ This API is designed to work with the **Vue.js todo-client** frontend. The compl
 - **Responsive design** with Tailwind CSS
 - **Auto-sync** with backend every 5 minutes
 
+## 🚨 **CORS Configuration & Troubleshooting**
+
+### **Common CORS Errors**
+
+If you see errors like:
+```
+Access to XMLHttpRequest at 'http://localhost:8000/api/login' from origin 'http://localhost:5173' 
+has been blocked by CORS policy: Response to preflight request doesn't pass access control check
+```
+
+### **Step-by-Step CORS Fix**
+
+#### **1. Update Sanctum Configuration**
+
+Edit `config/sanctum.php`:
+
+```php
+'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
+    '%s%s',
+    'localhost,localhost:3000,localhost:5173,127.0.0.1,127.0.0.1:8000,::1',
+    Sanctum::currentApplicationUrlWithPort(),
+))),
+```
+
+#### **2. Create CORS Configuration**
+
+Create `config/cors.php`:
+
+```php
+<?php
+
+return [
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'allowed_methods' => ['*'],
+    'allowed_origins' => [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'http://127.0.0.1:5173',
+    ],
+    'allowed_origins_patterns' => [],
+    'allowed_headers' => ['*'],
+    'exposed_headers' => [],
+    'max_age' => 0,
+    'supports_credentials' => true,
+];
+```
+
+#### **3. Update Environment Variables**
+
+Add to your `.env` file:
+
+```env
+# Sanctum Configuration for SPA
+SANCTUM_STATEFUL_DOMAINS=localhost:5173,localhost:3000,localhost:8000
+SESSION_DOMAIN=localhost
+
+# CORS Configuration  
+CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
+```
+
+#### **4. Install CORS Package (if needed)**
+
+```bash
+composer require fruitcake/laravel-cors
+```
+
+#### **5. Register CORS Middleware**
+
+In `bootstrap/app.php`:
+
+```php
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->api(prepend: [
+        \Illuminate\Http\Middleware\HandleCors::class,
+    ]);
+})
+```
+
+#### **6. Clear Configuration Cache**
+
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan serve
+```
+
+### **Frontend CORS Setup**
+
+In your Vue.js `src/config/api.ts`:
+
+```typescript
+import axios from 'axios'
+
+const api = axios.create({
+  baseURL: 'http://localhost:8000/api',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+  withCredentials: false, // Important: set to false for token-based auth
+})
+
+// Add token to requests
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+```
+
+### **Testing CORS Fix**
+
+1. **Restart Laravel server**: `php artisan serve`
+2. **Restart Vue.js server**: `npm run dev`
+3. **Test login** from the frontend
+4. **Check browser network tab** for successful requests
+
+### **Common CORS Issues & Solutions**
+
+| Issue | Solution |
+|-------|----------|
+| `OPTIONS requests failing` | Ensure CORS middleware is registered first |
+| `Credentials mode error` | Set `withCredentials: false` in frontend |
+| `Origin not allowed` | Add your frontend URL to `allowed_origins` |
+| `Token not sent` | Check Authorization header in interceptor |
+
 ## ⚡ Quick Start
 
 ### 1. Installation
